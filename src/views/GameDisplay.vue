@@ -18,7 +18,7 @@
     export default class GameDisplay extends Vue {
         private nowNumber: number = 0;
 
-        private questions: Question[] = [{kanji:"",hiragana:""}];
+        private questions: Question[] = [{kanji: '', hiragana: ''}];
 
         private setNextQuestion() {
             let randomNumber = Math.floor( Math.random() * this.questions.length);
@@ -35,8 +35,8 @@
                 .then(
                     (response) => {
                         this.questions = response.data.questions;
-                    }
-                ).catch(e => console.log(e));
+                    },
+                ).catch();
             this.nowNumber = Math.floor( Math.random() * this.questions.length);
         }
 
