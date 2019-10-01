@@ -1,126 +1,55 @@
 <template>
     <div>
-        <!--{{ name }}-->
-        <!--{{count}}-->
-        <typing-strings :answer="questionTypingString" :nowNumber="clearString.length"></typing-strings>
-        <div>
-            <div>
-                <input v-model="allInputString"/>
-            </div>
-
-            <div>debag</div>
-            <div>
-                allInputString: {{ allInputString }}
-            </div>
-            <div>
-                clearString: {{clearString}}
-            </div>
-            <div>
-                questionTypingString: {{ questionTypingString }}
-            </div>
-
-            <div>
-                judgment: {{judgment}}
-            </div>
-            <div>
-                noAnswerList: {{noAnswerList}}
-            </div>
-            <div>
-                {{}}
-            </div>
-        </div>
+        <typing-game-core :kanji="getKanji" :hiragana="getHiragana" @finish-typing="setNextQuestion"></typing-game-core>
     </div>
 </template>
 
 <script lang='ts'>
 
-    import {Component, Vue, Watch} from 'vue-property-decorator';
-    import TypingStrings from '@/components/TypingStrings.vue';
+    import {Component, Vue} from 'vue-property-decorator';
+    import TypingGameCore from '@/components/TypingGameCore.vue';
+    import axios from 'axios';
 
     @Component({
         components: {
-            TypingStrings,
+            TypingGameCore,
         },
     })
     export default class GameDisplay extends Vue {
+        private nowNumber: number = 0;
 
-        // 未回答リスト
-        private noAnswerList: string[] = ['sushi', 'susi'];
+        private questions: Question[] = [{kanji:"",hiragana:""}];
 
-        // 打ち込んで合ってたキー
-        private clearString: string = '';
+        private setNextQuestion() {
+            let randomNumber = Math.floor( Math.random() * this.questions.length);
 
-        // 打ち込んだキーすべて
-        private allInputString: string = '';
+            while (randomNumber === this.nowNumber) {
+                randomNumber = Math.floor( Math.random() * this.questions.length);
+            }
+            this.nowNumber = randomNumber;
 
-        // ミスタイプ数
-        private missTypeCount: number = 0;
-
-        private judgment: boolean = false;
-
-
-        // 打ち込む参考のtyping文字列
-        get questionTypingString(): string {
-            return this.clearString + this.noAnswerList[0];
         }
 
-
-        // 入力文字を検査
-        @Watch('allInputString')
-        private inputStringCheck() {
-            // 引数を投げる文字にする
-            this.judgment = this.judge(this.allInputString.substr(-1));
+        private async created() {
+            await axios.get('/mock/mock.json')
+                .then(
+                    (response) => {
+                        this.questions = response.data.questions;
+                    }
+                ).catch(e => console.log(e));
+            this.nowNumber = Math.floor( Math.random() * this.questions.length);
         }
 
-        // 完全正解したらtrueそれ以外false
-        private judge(input: string): boolean {
-            // firstStringCheckとの粒度考えること
-            //  allInputになにか入ってる前提じゃないとだめかも
-            // その場合ガード節追加すること
-
-            const rem: string[] = this.firstStringCheck(input, this.noAnswerList);
-
-            // listが空なら一致条件なしで失敗（typingミス）
-            if (rem.length === 0) {
-                this.missTypeCount++;
-                return false;
-            }
-
-            // クリア文字追加
-            this.clearString = this.clearString.toString() + input;
-            // 残り文字再登録
-            this.noAnswerList = rem;
-
-            // listに空の文字列があるなら完答があるのでtrue
-            for (const s of rem) {
-                if (s === '') {
-                    return true;
-                }
-            }
-
-            // それ以外のtypingは合っているがまだ問題残っているのでfalse
-            return false;
+        private get getKanji() {
+            return this.questions[this.nowNumber].kanji;
         }
-
-        // input文字とリストの1文字目を比較してあってたらその文字除いた残りのリストを作ってくれるメソッド
-        // 失敗なら何もない
-        // 成功しても失敗で無いなら空文字列残る
-        // なんか粒度違う…？
-        // todo
-        private firstStringCheck(input: string, noAnswerList: string[]): string[] {
-            if (noAnswerList.length === 0) {
-                return noAnswerList;
-            }
-            const remainingStrings: string[] = [];
-            for (const s of noAnswerList) {
-                if (input === s.substr(0, 1)) {
-                    remainingStrings.push(s.substr(1));
-                }
-            }
-            return remainingStrings;
+        private get  getHiragana() {
+            return this.questions[this.nowNumber].hiragana;
         }
-
-
+    }
+    interface Question {
+        kanji: string;
+        hiragana: string;
     }
 </script>
 

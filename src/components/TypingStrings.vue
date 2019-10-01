@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <h1>
         <span class="transparent">{{ clearAnswer }}</span>
         <span>{{ notAnswer }}</span>
-    </div>
+    </h1>
 </template>
 
 <script lang='ts'>
@@ -10,24 +10,12 @@
 
     @Component
     export default class TypingStrings extends Vue {
-        // private clearAnswer: string = '';
-        // private notAnswer: string = '';
-
 
         @Prop({default: ''})
-        private answer!: string;
+        private clearAnswer!: string;
 
-
-        @Prop({default: 0})
-        private nowNumber!: number;
-
-        get clearAnswer() {
-            return this.answer.substr(0, this.nowNumber);
-        }
-
-        get notAnswer() {
-            return this.answer.substr(this.nowNumber);
-        }
+        @Prop({default: ''})
+        private notAnswer!: string;
     }
 </script>
 
