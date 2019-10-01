@@ -40,6 +40,10 @@
 
     import {Component, Emit, Prop, Vue} from 'vue-property-decorator';
     import TypingStrings from '@/components/TypingStrings.vue';
+    // todo
+    // jsfile読み込むため型定義がないため、エラー回避のために追加
+    // tsに書き換え時に削除すること
+    // @ts-ignore
     import Changer from './Changer.js';
 
     @Component({
