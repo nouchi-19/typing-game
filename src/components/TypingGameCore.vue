@@ -4,21 +4,23 @@
         <!--<h1>{{ kanji }}</h1>-->
         <!--<typing-strings :answer="questionTypingString" :nowNumber="clearString.length"></typing-strings>-->
         <typing-strings :clearAnswer="clearString" :notAnswer="notAnswerList[0]"></typing-strings>
-        <div>
-            <div>
+        <!--<div>-->
+            <!--<div>-->
                 <!--<input v-model="allInputString"/>-->
-            </div>
-
+            <!--</div>-->
             <!--<div>debag</div>-->
             <!--<div>-->
                 <!--allInputString: {{ allInputString }}-->
             <!--</div>-->
-            <div>
-                misstype: {{ missTypeCount }}
-            </div>
-            <div>
-                continuousTyping: {{ continuousTyping }}
-            </div>
+            <!--<div>-->
+                <!--misstype: {{ missTypeCount }}-->
+            <!--</div>-->
+            <!--<div>-->
+                <!--allTypingCount: {{ allTypingCount }}-->
+            <!--</div>-->
+            <!--<div>-->
+                <!--continuousTyping: {{ continuousTypingCount }}-->
+            <!--</div>-->
             <!--<div>-->
                 <!--clearString: {{clearString}}-->
             <!--</div>-->
@@ -32,14 +34,15 @@
             <!--<div>-->
                 <!--noAnswerList: {{notAnswerList}}-->
             <!--</div>-->
-        </div>
+        <!--</div>-->
     </div>
 </template>
 
 <script lang='ts'>
 
-    import {Component, Emit, Prop, Vue} from 'vue-property-decorator';
+    import {Component, Emit, Prop, Vue, Watch} from 'vue-property-decorator';
     import TypingStrings from '@/components/TypingStrings.vue';
+    import axios from 'axios';
     // todo
     // jsfile読み込むため型定義がないため、エラー回避のために追加
     // tsに書き換え時に削除すること
@@ -68,15 +71,16 @@
 
         // 打ち込んだキーすべて
         // デバック用なので削除推奨かな？
-        private allInputString: string = '';
+        // private allInputString: string = '';
+
+        // キータイプした数
+        private allTypingCount: number = 0;
 
         // ミスなしタイピング数
-        private continuousTyping: number = 0;
+        private continuousTypingCount: number = 0;
 
         // ミスタイプ数
         private missTypeCount: number = 0;
-
-
 
         // ワードtyping成功判定
         // private judgment: boolean = false;
@@ -94,13 +98,14 @@
         // 問題の初期化
         private setUp() {
             this.clearString = '';
-            this.allInputString = '';
+            // this.allInputString = '';
             this.setTypingString(this.hiragana);
         }
 
         // キー投下時の処理
         private keyDown(e: any) {
-            this.allInputString = this.allInputString.toString() + e.key;
+            // this.allInputString = this.allInputString.toString() + e.key;
+            this.allTypingCount++;
             this.judge(e.key);
         }
 
@@ -132,7 +137,7 @@
             // listが空なら一致条件なしで失敗（typingミス）
             if (rem.length === 0) {
                 this.missTypeCount++;
-                this.continuousTyping = 0;
+                this.continuousTypingCount = 0;
                 // return false;
                 return;
             }
@@ -141,7 +146,7 @@
             this.clearString = this.clearString.toString() + input;
             // 残り文字再登録
             this.notAnswerList = rem;
-            this.continuousTyping++;
+            this.continuousTypingCount++;
 
             // listに空の文字列があるなら完答があるのでtrue
             for (const s of rem) {
@@ -181,14 +186,26 @@
             return;
         }
 
+        @Watch('allTypingCount')
+        private send() {
+            this.sendCounter();
+        }
+
+        @Emit('counter')
+        private sendCounter() {
+            return {
+                allTypingCount: this.allTypingCount,
+                continuousTypingCount: this.continuousTypingCount,
+                missTypeCount: this.missTypeCount,
+            };
+        }
+
         // kanji更新時にセットアップを挟むことで更新時リセット
         // 更新がkanji依存なのが嫌だ
         get setKanji() {
             this.setUp();
             return this.kanji;
         }
-
-
     }
 </script>
 

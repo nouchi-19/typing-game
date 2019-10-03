@@ -3,7 +3,7 @@
 // webからのコピーなので書き換えような
 
 // todo
-const isAlphabet = char => char !== '' && 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789- ,:(){}.・!&%'.includes(char);
+const isAlphabet = char => char !== '' && 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789- ,:(){}.・!&%?'.includes(char);
 
 // romanTableには通常の規則性で対応できない文字のみを入れている。
 const romanTable = {
@@ -20,7 +20,7 @@ const romanTable = {
     'てぃ': ['thi','texi'],'てぇ': ['the','texe'],
     'とぁ': ['twa','toxa'],'とぃ': ['twi','toxi'],'とぅ': ['twu','toxu'],'とぇ': ['twe','toxe'],'とぉ': ['two','toxo'],
     'ふぁ': ['fa','fuxa','huxa'],'ふぃ': ['fi','fuxi','huxi'],'ふぇ': ['fe','fuxe','huxe'],'ふぉ': ['fo','fuxo','huxo'],
-    'ゐ': ['wyi'],'ゑ': ['wye'],'ー': ['-'],'。': ['.']
+    'ゐ': ['wyi'],'ゑ': ['wye'],'ー': ['-'],'。': ['.'],'！': ['!'],'？': ['?'],'、': [',']
 };
 
 romanTable['ヴぁ'] = romanTable['ゔぁ']; romanTable['ヴぃ'] = romanTable['ゔぃ'];
