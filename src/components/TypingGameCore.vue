@@ -132,7 +132,10 @@
             //  allInputになにか入ってる前提じゃないとだめかも
             // その場合ガード節追加すること
 
-            const rem: string[] = this.firstStringCheck(input, this.notAnswerList);
+            //大文字を許容
+            const inputLow = input.toLowerCase();
+
+            const rem: string[] = this.firstStringCheck(inputLow, this.notAnswerList);
 
             // listが空なら一致条件なしで失敗（typingミス）
             if (rem.length === 0) {
@@ -143,7 +146,7 @@
             }
 
             // クリア文字追加
-            this.clearString = this.clearString.toString() + input;
+            this.clearString = this.clearString.toString() + inputLow;
             // 残り文字再登録
             this.notAnswerList = rem;
             this.continuousTypingCount++;
