@@ -1,9 +1,9 @@
 <template>
-    <div >
-        <h1>{{ setKanji }}</h1>
+    <div>
+        <!--<h1>{{ setKanji }}</h1>-->
         <!--<h1>{{ kanji }}</h1>-->
         <!--<typing-strings :answer="questionTypingString" :nowNumber="clearString.length"></typing-strings>-->
-        <typing-strings :clearAnswer="clearString" :notAnswer="notAnswerList[0]"></typing-strings>
+        <typing-strings :kanji="setKanji" :clearAnswer="clearString" :notAnswer="notAnswerList[0]"></typing-strings>
         <!--<div>-->
             <!--<div>-->
                 <!--<input v-model="allInputString"/>-->
@@ -43,6 +43,8 @@
     import {Component, Emit, Prop, Vue, Watch} from 'vue-property-decorator';
     import TypingStrings from '@/components/TypingStrings.vue';
     import axios from 'axios';
+
+
     // todo
     // jsfile読み込むため型定義がないため、エラー回避のために追加
     // tsに書き換え時に削除すること
@@ -63,6 +65,9 @@
         @Prop({default: ''})
         private hiragana!: string;
 
+        // @Prop({default: ''})
+        // private typingKey!: string;
+
         // 未回答リスト
         private notAnswerList: string[] = [];
 
@@ -70,7 +75,7 @@
         private clearString: string = '';
 
         // 打ち込んだキーすべて
-        // デバック用なので削除推奨かな？
+        // debag用?
         // private allInputString: string = '';
 
         // キータイプした数
@@ -87,12 +92,12 @@
 
         // スタート時に起動
         private mounted() {
-            window.addEventListener('keypress', this.keyDown);
+            window.addEventListener('keydown', this.keyDown);
         }
 
         // 複数展開どうなんのこれ
         private destroyed() {
-            window.removeEventListener('keypress', this.keyDown);
+            window.removeEventListener('keydown', this.keyDown);
         }
 
         // 問題の初期化
@@ -105,8 +110,12 @@
         // キー投下時の処理
         private keyDown(e: any) {
             // this.allInputString = this.allInputString.toString() + e.key;
-            this.allTypingCount++;
-            this.judge(e.key);
+            if (e.code === 'Escape') {
+                this.restartTyping();
+            } else {
+                this.allTypingCount++;
+                this.judge(e.key);
+            }
         }
 
         // ローマ字のリストを生成
@@ -132,7 +141,7 @@
             //  allInputになにか入ってる前提じゃないとだめかも
             // その場合ガード節追加すること
 
-            //大文字を許容
+            // 大文字を許容
             const inputLow = input.toLowerCase();
 
             const rem: string[] = this.firstStringCheck(inputLow, this.notAnswerList);
@@ -182,6 +191,11 @@
                 }
             }
             return remainingString;
+        }
+
+        @Emit()
+        private restartTyping() {
+            return;
         }
 
         @Emit()

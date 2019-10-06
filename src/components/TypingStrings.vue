@@ -1,8 +1,13 @@
 <template>
-    <h1>
-        <span class="transparent">{{ clearAnswer }}</span>
-        <span>{{ notAnswer }}</span>
-    </h1>
+    <div>
+        <h1>
+            {{kanji}}
+        </h1>
+        <h1>
+            <span class="transparent">{{ clearAnswer }}</span>
+            <span>{{ notAnswer }}</span>
+        </h1>
+    </div>
 </template>
 
 <script lang='ts'>
@@ -16,6 +21,9 @@
 
         @Prop({default: ''})
         private notAnswer!: string;
+
+        @Prop({default: ''})
+        private kanji!: string;
     }
 </script>
 

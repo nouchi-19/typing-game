@@ -16,6 +16,10 @@
             対戦
         </h1>
 
+        <h1>
+            <router-link to="/test" >test</router-link>
+        </h1>
+
     </div>
 </template>
 
@@ -27,9 +31,6 @@
         components: {
         },
     })export default class Home extends Vue {
-        private test() {
-            console.log("s")
-        }
     }
 
 </script>
