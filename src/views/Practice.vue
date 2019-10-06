@@ -14,8 +14,8 @@
         <div>秒間正解数:{{parSeconds}}</div>
         <div>経過秒数: {{seconds}}</div>
         <div>問題番号: {{nowNumber}}</div>
-        <div><button @click="countReset">reset</button></div>
 
+        <div><button @click="countReset">reset</button></div>
         <router-link to="/" tag="button">戻る</router-link>
     </div>
 </template>
@@ -33,8 +33,11 @@
         },
     })
     export default class Practice extends Vue {
+        @Prop({default: '/mock/mock1.json'})
+        private dataURL!: string;
+
         private nowNumber: number = 0;
-        private questions: Question[] = [{kanji: '', hiragana: ''}];
+        private questions: Question[] = [{id: 0, kanji: '', hiragana: ''}];
 
         private allTypingCount: number = 0;
         private continuousTypingCount: number = 0;
@@ -44,7 +47,7 @@
         private intervalId: any;
 
         private async created() {
-            await axios.get('/mock/mock2.json')
+            await axios.get(this.dataURL)
                 .then(
                     (response) => {
                         this.questions = response.data.questions;
@@ -114,6 +117,7 @@
         }
     }
     interface Question {
+        id: number;
         kanji: string;
         hiragana: string;
     }

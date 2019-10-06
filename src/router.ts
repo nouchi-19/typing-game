@@ -19,8 +19,15 @@ export default new Router({
             component: Home,
         },
         {
-            path: '/practice',
-            name: 'practice',
+            path: '/practice1',
+            name: 'practice1',
+            props: {dataURL: '/mock/mock1.json'},
+            component: Practice,
+        },
+        {
+            path: '/practice2',
+            name: 'practice2',
+            props: {dataURL: '/mock/mock2.json'},
             component: Practice,
         },
         // {

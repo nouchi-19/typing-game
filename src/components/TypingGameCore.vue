@@ -115,7 +115,7 @@
             let i: number = 0;
             let res: string[] = [''];
             while (i < str.length) {
-                const [pattern, count] = Changer.getRoman(str, i);
+                const [pattern, count] = new Changer({enableLKey: true}).getRoman(str, i);
                 const temp = [];
                 for (const p of  pattern) {
                     temp.push(...res.map((item) => item + p));

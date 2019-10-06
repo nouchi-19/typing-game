@@ -1,30 +1,32 @@
 {
   "questions": [
     {
+      "id": 1,
       "kanji": "寿司",
       "hiragana": "すし"
     },
     {
-      "kanji": "笹互おいしい",
-      "hiragana": "ささごおいしい"
-    },
-    {
+      "id": 2,
       "kanji": "おはよう",
       "hiragana": "おはよう"
     },
     {
+      "id": 3,
       "kanji": "こんにちは",
       "hiragana": "こんにちは"
     },
     {
+      "id": 4,
       "kanji": "こんばんは",
       "hiragana": "こんばんは"
     },
     {
+      "id": 5,
       "kanji": "さよなら",
       "hiragana": "さよなら"
     },
     {
+      "id": 6,
       "kanji": "やあ",
       "hiragana": "やあ"
     }
