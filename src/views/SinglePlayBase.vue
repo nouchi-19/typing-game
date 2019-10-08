@@ -1,6 +1,15 @@
 <template>
     <div>
-        <slot name="header"></slot>
+        <slot
+                name="header"
+                :allTypingCount="allTypingCount"
+                :clearTypingCount="clearTypingCount"
+                :continuousTypingCount="continuousTypingCount"
+                :missTypeCount="missTypeCount"
+                :parSeconds="parSeconds"
+                :seconds="seconds"
+                :remainingTime="remainingTime"
+        ></slot>
         <start-message v-if="!gameRanning"></start-message>
         <typing-game-core
                 v-else
@@ -22,31 +31,30 @@
                     :missTypeCount="missTypeCount"
                     :parSeconds="parSeconds"
                     :seconds="seconds"
+                    :remainingTime="remainingTime"
             >
                 <div>総タイピング数:{{ allTypingCount }}</div>
-                <div>総正解タイピング数: {{clearTypingCount}}</div>
-                <div>連続正解タイピング数:{{continuousTypingCount}}</div>
-                <div>ミスタイプ数:{{missTypeCount}}</div>
-                <div>秒間正解数:{{parSeconds}}</div>
-                <div>経過秒数: {{seconds}}</div>
+                <div>総正解タイピング数: {{ clearTypingCount }}</div>
+                <div>連続正解タイピング数:{{ continuousTypingCount }}</div>
+                <div>ミスタイプ数:{{ missTypeCount }}</div>
+                <div>秒間正解数:{{ parSeconds }}</div>
+                <div>経過秒数: {{ seconds }}</div>
+                <div>残り時間:{{ remainingTime }}</div>
+                <router-link to="/" tag="button">Homeに戻る</router-link>
             </slot>
         </div>
-
-        <h3>escapeでリセット</h3>
-
-
-        <router-link to="/" tag="button">Homeに戻る</router-link>
 
     </div>
 </template>
 
 <script lang='ts'>
 
-    import {Component, Prop, Vue} from 'vue-property-decorator';
-    import TypingGameCore from '@/components/TypingGameCore.vue';
+    import {Component, Emit, Prop, Vue, Watch} from 'vue-property-decorator';
+    import TypingGameCore from '../components/TypingGameCore.vue';
     import axios from 'axios';
     import {Counter} from '@/components/Counter.ts';
     import StartMessage from '@/components/StartMessage.vue';
+    import {Result} from '@/components/Result';
 
     @Component({
         components: {
@@ -57,6 +65,9 @@
     export default class SinglePlayBase extends Vue {
         @Prop({default: '/mock/mock1.json'})
         private dataURL!: string;
+
+        @Prop({default: -1})
+        private limit!: number;
 
         private nowNumber: number = 0;
         private questions: Question[] = [{id: 0, kanji: '', hiragana: ''}];
@@ -81,9 +92,6 @@
         }
 
         private mounted() {
-            this.intervalId = setInterval(() => {
-                this.seconds++;
-            }, 1000);
             window.addEventListener('keydown', this.keyDown);
         }
 
@@ -96,9 +104,12 @@
             if (!this.gameRanning && e.code === 'Space')  {
                 this.countReset();
                 this.gameRanning = true;
+                this.intervalId = setInterval(() => {
+                    this.seconds++;
+                }, 1000);
                 window.removeEventListener('keydown', this.keyDown);
             } else {
-               return;
+                return;
             }
         }
 
@@ -112,9 +123,6 @@
             if (this.intervalId) {
                 clearInterval(this.intervalId);
             }
-            this.intervalId = setInterval(() => {
-                this.seconds++;
-            }, 1000);
         }
 
         // todo
@@ -139,7 +147,7 @@
         private counter(result: Counter) {
             this.allTypingCount = result.allTypingCount;
             this.continuousTypingCount = result.continuousTypingCount;
-            this. missTypeCount = result.missTypeCount;
+            this.missTypeCount = result.missTypeCount;
         }
 
         private setNextQuestion() {
@@ -168,6 +176,30 @@
                 return 0;
             }
             return Math.floor(this.clearTypingCount / this.seconds * 100 ) / 100;
+        }
+
+
+
+        private get remainingTime() {
+            // 時間制限の終了時に発火するイベント
+            const rem = this.limit - this.seconds;
+            if (rem === 0) {
+                clearInterval(this.intervalId);
+                this.result();
+            }
+            return rem;
+
+        }
+
+        @Emit()
+        private result(): Result {
+            return {
+                allTypingCount: this.allTypingCount,
+                clearTypingCount: this.clearTypingCount,
+                continuousTypingCount: this.continuousTypingCount,
+                missTypeCount: this.missTypeCount,
+                parSeconds: this.parSeconds,
+            };
         }
     }
     interface Question {

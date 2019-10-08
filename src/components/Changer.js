@@ -183,7 +183,7 @@ export default class Chenger {
             'とぉ': 'two,toxo',
             'でぃ': 'dhi,dexi', 'でゅ': 'dhu,dexyu', 'どぅ': 'dwu,doxu',
             'ゐ': 'wyi', 'ゑ': 'wye',
-            'ー': '-', '。': '.', '！': '!', '？': '?', '、': ','
+            'ー': '-', '。': '.', '！': '!', '、': ',', '？': '?',
         };
 
         for (const key of Object.keys(this.romanTable)) this.romanTable[key] = this.romanTable[key].split(',');
@@ -218,6 +218,7 @@ export default class Chenger {
         }
         this.romanTable['ゆ'] = ['yu'];
         this.romanTable['よ'] = ['yo'];
+        this.romanTable['、'] = [','];
     }
     getRoman(furigana, targetPos) {
         // ローマ字の取得

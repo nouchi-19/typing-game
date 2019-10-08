@@ -1,7 +1,10 @@
 <template>
-    <h1>
-        spaseでスタート
-    </h1>
+    <div>
+        <h1>
+            spaseでスタート
+        </h1>
+        <h3>escapeでリセット</h3>
+    </div>
 </template>
 
 <script lang='ts'>

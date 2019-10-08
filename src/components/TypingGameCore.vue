@@ -54,7 +54,6 @@
     @Component({
         components: {
             TypingStrings,
-            Changer,
         },
     })
     export default class TypingGameCore extends Vue {
@@ -64,6 +63,9 @@
 
         @Prop({default: ''})
         private hiragana!: string;
+
+        // 受け入れ時のみリスナーを起動するようにしたい
+        // private typeListener: boolean = false;
 
         // @Prop({default: ''})
         // private typingKey!: string;
