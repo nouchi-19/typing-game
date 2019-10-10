@@ -1,42 +1,180 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-    <div>
+    <!--<v-container fluid>-->
+        <!--<single-play-base :dataURL="dataURL">-->
+            <!--<template #header>-->
+                <!--<v-container fluid>-->
+                    <!--<v-row justify="center">-->
+                        <!--練習モード-->
+                    <!--</v-row>-->
+                <!--</v-container>-->
+            <!--</template>-->
+            <!--<template #footer="slotProps">-->
+                <!--<v-vontainer fluiy>-->
+                    <!--<v-row justify="center">-->
+                        <!--<v-col md="4" class="text-center">総タイピング数:{{ slotProps.allTypingCount }}</v-col>-->
+                        <!--<v-col md="4" class="text-center">総正解タイピング数: {{ slotProps.clearTypingCount }}</v-col>-->
+                        <!--<v-col md="4" class="text-center">連続正解タイピング数:{{ slotProps.continuousTypingCount }}</v-col>-->
+                        <!--<v-col md="4" class="text-center">ミスタイプ数:{{ slotProps.missTypeCount }}</v-col>-->
+                        <!--<v-col md="4" class="text-center">秒間正解数:{{ slotProps.parSeconds }}</v-col>-->
+                        <!--<v-col md="4" class="text-center">経過秒数: {{ slotProps.seconds }}</v-col>-->
+                    <!--</v-row>-->
+                    <!--<v-row justify="center">-->
+                        <!--<v-btn class="ma-2" outlined color="teal" @click="transition('/')">Homeに戻る</v-btn>-->
+                        <!--&lt;!&ndash;<router-link to="/" tag="button">Homeに戻る</router-link>&ndash;&gt;-->
+                    <!--</v-row>-->
+                <!--</v-vontainer>-->
+                <!--&lt;!&ndash;<v-cont&ndash;&gt;-->
+
+            <!--</template>-->
+        <!--</single-play-base>-->
+    <!--</v-container>-->
+    <v-container fluid>
         <single-play-base v-if="!showModal" :dataURL="dataURL" :limit="limit" @result="resultPage">
             <template #header="slotProps">
-                <div>
-                    タイムアタック
-                </div>
-                <div>
-                    <h2>
-                        残り時間:{{ slotProps.remainingTime }}
-                    </h2>
-                </div>
+                <v-container fluid>
+                    <v-row justify="center">
+                        タイムアタック
+                    </v-row>
+                </v-container>
+                <v-container fluid>
+                    <v-row justify="center">
+                        <v-card
+                                class="mx-auto"
+                                max-width="500"
+                                elevation=0
+                                outlined
+                        >
+                            <v-card-title class="justify-center">
+                                残り時間
+                            </v-card-title>
+                            <v-card-text class="text-center display-2 text--primary">
+                                {{ slotProps.remainingTime }}
+                            </v-card-text>
+                        </v-card>
+                    </v-row>
+                </v-container>
             </template>
             <template #footer="slotProps">
-                <div>総タイピング数:{{ slotProps.allTypingCount }}</div>
-                <div>総正解タイピング数: {{ slotProps.clearTypingCount }}</div>
-                <div>連続正解タイピング数:{{ slotProps.continuousTypingCount }}</div>
-                <div>ミスタイプ数:{{ slotProps.missTypeCount }}</div>
-                <div>秒間正解数:{{ slotProps.parSeconds }}</div>
+                <v-container fluiy>
+                    <v-row justify="center">
+                        <v-col md="4" class="text-center">総タイピング数:{{ slotProps.allTypingCount }}</v-col>
+                        <v-col md="4" class="text-center">総正解タイピング数: {{ slotProps.clearTypingCount }}</v-col>
+                        <v-col md="4" class="text-center">連続正解タイピング数:{{ slotProps.continuousTypingCount }}</v-col>
+                        <v-col md="4" class="text-center">ミスタイプ数:{{ slotProps.missTypeCount }}</v-col>
+                        <v-col md="4" class="text-center">秒間正解数:{{ slotProps.parSeconds }}</v-col>
+                    </v-row>
+                    <v-row justify="center">
+                        <v-btn rounded class="ma-2" outlined color="teal" @click="transition('/')">Homeに戻る</v-btn>
+                    </v-row>
+                </v-container>
             </template>
         </single-play-base>
 
-        <modal v-if="showModal" @close="showModal = false">
-            <template #header>
-                <h3>RESULT</h3>
-            </template>
-            <template #body>
-                <div>総タイピング数:{{ result.allTypingCount }}</div>
-                <div>総正解タイピング数: {{result.clearTypingCount}}</div>
-                <div>連続正解タイピング数:{{result.continuousTypingCount}}</div>
-                <div>ミスタイプ数:{{result.missTypeCount}}</div>
-                <div>秒間正解数:{{result.parSeconds}}</div>
-            </template>
-            <template #footer>
-                <router-link to="/time-attack-ranking" tag="button">ランキングを見る</router-link>
-                <router-link to="/" tag="button">Homeに戻る</router-link>
-            </template>
-        </modal>
-    </div>
+        <!--<v-dialog v-if="showModal" persistent max-width="290">-->
+            <!--<v-card>-->
+                <!--<v-card-title class="headline">Use Google's location service?</v-card-title>-->
+                <!--<v-card-text>Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.</v-card-text>-->
+                <!--<v-card-actions>-->
+                    <!--<div class="flex-grow-1"></div>-->
+                <!--</v-card-actions>-->
+            <!--</v-card>-->
+        <!--</v-dialog>-->
+
+
+        <!--sweetalart2実装した場合削除-->
+        <v-dialog v-model="showModal" persistent max-width="500">
+            <v-card>
+                <v-card-title class="headline">結果</v-card-title>
+                <v-card-text>
+                    <v-container fluid>
+                        <v-row>総タイピング数:{{ result.allTypingCount }}</v-row>
+                        <v-row>総正解タイピング数: {{result.clearTypingCount}}</v-row>
+                        <v-row>連続正解タイピング数:{{result.continuousTypingCount}}</v-row>
+                        <v-row>ミスタイプ数:{{result.missTypeCount}}</v-row>
+                        <v-row>秒間正解数:{{result.parSeconds}}</v-row>
+                        <v-row>
+                            <v-text-field
+                                    label="ユーザ名"
+                                    required
+                                    outlined
+                                    clearable
+                                    v-model="userName"
+                                    hint="ランキングに登録する場合はユーザ名を必ず入力してください"
+                                    persistent-hint
+                            ></v-text-field>
+                        </v-row>
+                        <!--実装後変更-->
+                        <!--<v-row justify="center">-->
+                            <!--<v-btn :disabled="!userName" class="ma-2" outlined color="teal" @click="sendRanking">ランキングに登録する</v-btn>-->
+                        <!--</v-row>-->
+                        <!--ここまで-->
+                        <!--下記実装後削除-->
+                        <v-row justify="center">
+                            <v-btn disabled=false class="ma-2" outlined color="teal" @click="sendRanking">ランキングに登録する</v-btn>
+                        </v-row>
+                        <!--ここまで-->
+                    </v-container>
+                </v-card-text>
+                <v-card-actions>
+                    <v-row justify="center">
+                        <!--<v-btn class="ma-2" outlined color="teal" @click="transition('/time-attack-ranking')">ランキングを見る</v-btn>-->
+                        <v-btn
+                                disabled=false
+                                rounded
+                                class="ma-2"
+                                outlined color="teal"
+                                @click="transition('/time-attack-ranking')"
+                        >
+                            ランキングを見る
+                        </v-btn>
+                        <v-btn
+                                class="ma-2"
+                                rounded
+                                outlined
+                                color="teal"
+                                @click="transition('/')"
+                        >
+                            Homeに戻る
+                        </v-btn>
+                    </v-row>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+        <v-dialog v-model="dialog2" persistent max-width="500">
+            <v-card>
+                <!--<v-card-title class="headline text-center">{{this.userName}}さんの記録を登録しました</v-card-title>-->
+                <v-card-actions>
+                    <v-row justify="center">
+                        <v-btn class="ma-2" outlined color="teal" @click="transition('/time-attack-ranking')">ランキングを見る</v-btn>
+                        <v-btn class="ma-2" outlined color="teal" @click="transition('/')">Homeに戻る</v-btn>
+                    </v-row>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+
+
+
+
+        <!--<modal v-if="showModal" @close="showModal = false">-->
+            <!--<template #header>-->
+                <!--<h3>RESULT</h3>-->
+            <!--</template>-->
+            <!--<template #body>-->
+
+                <!--<div>総タイピング数:{{ result.allTypingCount }}</div>-->
+                <!--<div>総正解タイピング数: {{result.clearTypingCount}}</div>-->
+                <!--<div>連続正解タイピング数:{{result.continuousTypingCount}}</div>-->
+                <!--<div>ミスタイプ数:{{result.missTypeCount}}</div>-->
+                <!--<div>秒間正解数:{{result.parSeconds}}</div>-->
+            <!--</template>-->
+            <!--<template #footer>-->
+                <!--<router-link to="/time-attack-ranking" tag="button">ランキングを見る</router-link>-->
+                <!--<router-link to="/" tag="button">Homeに戻る</router-link>-->
+            <!--</template>-->
+        <!--</modal>-->
+    </v-container>
 </template>
 
 <script lang='ts'>
@@ -60,7 +198,11 @@
         @Prop({default: 0})
         private limit!: number;
 
+        private userName: string = '';
+
         private showModal: boolean = false;
+
+        private dialog2: boolean = false;
 
         private result: Result = {
             allTypingCount: 0,
@@ -73,6 +215,20 @@
         private resultPage(result: Result) {
             this.result = result;
             this.showModal = true;
+        }
+
+        private transition(path: string) {
+            if (path === '') {
+                return;
+            }
+            this.$router.push(path);
+        }
+
+        private sendRanking() {
+            console.log(this.userName);
+            this.dialog2 = true;
+            //ランキング送信後下にリンク
+            // this.$router.push('/time-attack-ranking');
         }
     }
 </script>

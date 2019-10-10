@@ -1,9 +1,11 @@
 <template>
-    <div>
+    <typing-strings :kanji="setKanji" :clearAnswer="clearString" :notAnswer="notAnswerList[0]"></typing-strings>
+    <!--<v-container fluid>-->
+
         <!--<h1>{{ setKanji }}</h1>-->
         <!--<h1>{{ kanji }}</h1>-->
         <!--<typing-strings :answer="questionTypingString" :nowNumber="clearString.length"></typing-strings>-->
-        <typing-strings :kanji="setKanji" :clearAnswer="clearString" :notAnswer="notAnswerList[0]"></typing-strings>
+
         <!--<div>-->
             <!--<div>-->
                 <!--<input v-model="allInputString"/>-->
@@ -35,7 +37,7 @@
                 <!--noAnswerList: {{notAnswerList}}-->
             <!--</div>-->
         <!--</div>-->
-    </div>
+    <!--</v-container>-->
 </template>
 
 <script lang='ts'>

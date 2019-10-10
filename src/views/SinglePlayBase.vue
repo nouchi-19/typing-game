@@ -1,28 +1,31 @@
 <template>
-    <div>
-        <slot
-                name="header"
-                :allTypingCount="allTypingCount"
-                :clearTypingCount="clearTypingCount"
-                :continuousTypingCount="continuousTypingCount"
-                :missTypeCount="missTypeCount"
-                :parSeconds="parSeconds"
-                :seconds="seconds"
-                :remainingTime="remainingTime"
-        ></slot>
-        <start-message v-if="!gameRanning"></start-message>
-        <typing-game-core
-                v-else
-                :kanji="getKanji"
-                :hiragana="getHiragana"
-                @finish-typing="setNextQuestion"
-                @restart-typing="restart"
-                @counter="counter"
-        >
-        </typing-game-core>
-        <!--<div>問題番号: {{nowNumber}}</div>-->
+    <v-container fluid>
+        <v-row justify="center">
+            <slot
+                    name="header"
+                    :allTypingCount="allTypingCount"
+                    :clearTypingCount="clearTypingCount"
+                    :continuousTypingCount="continuousTypingCount"
+                    :missTypeCount="missTypeCount"
+                    :parSeconds="parSeconds"
+                    :seconds="seconds"
+                    :remainingTime="remainingTime"
+            ></slot>
+        </v-row>
 
-        <div>
+        <v-row justify="center">
+            <start-message v-if="!gameRanning"></start-message>
+            <typing-game-core
+                    v-else
+                    :kanji="getKanji"
+                    :hiragana="getHiragana"
+                    @finish-typing="setNextQuestion"
+                    @restart-typing="restart"
+                    @counter="counter"
+            >
+            </typing-game-core>
+        </v-row>
+        <v-row justify="center">
             <slot
                     name="footer"
                     :allTypingCount="allTypingCount"
@@ -42,9 +45,8 @@
                 <div>残り時間:{{ remainingTime }}</div>
                 <router-link to="/" tag="button">Homeに戻る</router-link>
             </slot>
-        </div>
-
-    </div>
+        </v-row>
+    </v-container>
 </template>
 
 <script lang='ts'>

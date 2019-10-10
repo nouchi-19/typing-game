@@ -1,13 +1,22 @@
 <template>
-    <div>
-        <h1>
-            {{kanji}}
-        </h1>
-        <h1>
-            <span class="transparent">{{ clearAnswer }}</span>
-            <span>{{ notAnswer }}</span>
-        </h1>
-    </div>
+    <v-container fluid>
+        <v-divider></v-divider>
+        <v-row justify="center">
+            <span
+                    class="text-center display-3 ma-2"
+            >
+                {{kanji}}
+            </span>
+        </v-row>
+        <v-row justify="center">
+            <div class="ma-2">
+                <span class="transparent text-center display-2">{{ clearAnswer }}</span>
+                <span class="text-center display-2">{{ notAnswer }}</span>
+            </div>
+        </v-row>
+        <v-divider></v-divider>
+    </v-container>
+
 </template>
 
 <script lang='ts'>

@@ -161,9 +161,9 @@ export default class Chenger {
         this.config = config;
         this.romanTable = {'を': 'wo',
             'しゃ': 'sya,sha,sixya,shixya', 'しゅ': 'syu,shu,sixyu,shixyu',
-            'しぇ': 'sye,she,sixye,shixye', 'しょ': 'syo,sho,sixyo,shixyo',
+            'しぇ': 'sye,she,sixe,sixye,shixye', 'しょ': 'syo,sho,sixyo,shixyo',
             'ちゃ': 'tya,cha,tixya,chixya', 'ちゅ': 'tyu,chu,tixyu,chixyu',
-            'ちぇ': 'tye,che,tixye,chixye', 'ちょ': 'tyo,cho,tixyo,chixyo',
+            'ちぇ': 'tye,che,tixe,tixye,chixye', 'ちょ': 'tyo,cho,tixyo,chixyo',
             'じゃ': 'ja,zya,jixya,zixya', 'じゅ': 'ju,zyu,jixyu,zixyu',
             'じぇ': 'je,zye,jixe,zixe', 'じょ': 'jo,zyo,jixyo,zixyo',
             'てぃ': 'thi,texi', 'てぇ': 'the,texe', 'ふぁ': 'fa,fuxa,huxa',
