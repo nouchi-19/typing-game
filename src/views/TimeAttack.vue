@@ -225,9 +225,9 @@
         }
 
         private sendRanking() {
-            console.log(this.userName);
+            // console.log(this.userName);
             this.dialog2 = true;
-            //ランキング送信後下にリンク
+            // ランキング送信後下のURLにリンク
             // this.$router.push('/time-attack-ranking');
         }
     }

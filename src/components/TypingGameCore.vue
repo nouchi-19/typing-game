@@ -85,7 +85,7 @@
         // キータイプした数
         private allTypingCount: number = 0;
 
-        // ミスなしタイピング数
+        // 連続ミスなしタイピング数
         private continuousTypingCount: number = 0;
 
         // ミスタイプ数

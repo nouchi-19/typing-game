@@ -65,15 +65,21 @@
         },
     })
     export default class SinglePlayBase extends Vue {
+        // データのURL
         @Prop({default: '/mock/mock1.json'})
         private dataURL!: string;
 
+        // 制限時間
         @Prop({default: -1})
         private limit!: number;
 
-        private nowNumber: number = 0;
+        // 問題番号
+        private questionNumber: number = 0;
+
+        // 問題のリスト
         private questions: Question[] = [{id: 0, kanji: '', hiragana: ''}];
 
+        //
         private allTypingCount: number = 0;
         private continuousTypingCount: number = 0;
         private missTypeCount: number = 0;
@@ -90,7 +96,7 @@
                         this.questions = response.data.questions;
                     },
                 ).catch();
-            this.nowNumber = Math.floor( Math.random() * this.questions.length);
+            this.questionNumber = Math.floor( Math.random() * this.questions.length);
         }
 
         private mounted() {
@@ -155,18 +161,18 @@
         private setNextQuestion() {
             let randomNumber = Math.floor( Math.random() * this.questions.length);
 
-            while (randomNumber === this.nowNumber) {
+            while (randomNumber === this.questionNumber) {
                 randomNumber = Math.floor( Math.random() * this.questions.length);
             }
-            this.nowNumber = randomNumber;
+            this.questionNumber = randomNumber;
         }
 
         private get getKanji() {
-            return this.questions[this.nowNumber].kanji;
+            return this.questions[this.questionNumber].kanji;
         }
 
         private get getHiragana() {
-            return this.questions[this.nowNumber].hiragana;
+            return this.questions[this.questionNumber].hiragana;
         }
 
         private get clearTypingCount() {
@@ -179,8 +185,6 @@
             }
             return Math.floor(this.clearTypingCount / this.seconds * 100 ) / 100;
         }
-
-
 
         private get remainingTime() {
             // 時間制限の終了時に発火するイベント

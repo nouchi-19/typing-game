@@ -118,9 +118,9 @@
                     {
                         path: '/practice2',
                         exp: '中級',
-                    }
-                ]
-            }
+                    },
+                ],
+            },
         ];
 
         private transition(path: string) {
