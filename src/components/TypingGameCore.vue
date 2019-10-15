@@ -67,7 +67,8 @@
         private hiragana!: string;
 
         // 受け入れ時のみリスナーを起動するようにしたい
-        // private typeListener: boolean = false;
+        @Prop({default: true})
+        private keyDownListener!: boolean;
 
         // @Prop({default: ''})
         // private typingKey!: string;
@@ -94,15 +95,25 @@
         // ワードtyping成功判定
         // private judgment: boolean = false;
 
-        // スタート時に起動
+        // // スタート時に起動
         private mounted() {
             window.addEventListener('keydown', this.keyDown);
         }
-
-        // 複数展開どうなんのこれ
+        // // 複数展開どうなんのこれ
         private destroyed() {
             window.removeEventListener('keydown', this.keyDown);
         }
+
+        @Watch ('keyDownListener')
+        private keyDownEvent() {
+            if (this.keyDownListener) {
+                window.addEventListener('keydown', this.keyDown);
+            } else {
+                window.removeEventListener('keydown', this.keyDown);
+            }
+        }
+
+
 
         // 問題の初期化
         private setUp() {
@@ -188,13 +199,16 @@
             if (noAnswerList.length === 0) {
                 return noAnswerList;
             }
-            const remainingString: string[] = [];
-            for (const s of noAnswerList) {
-                if (input === s.substr(0, 1)) {
-                    remainingString.push(s.substr(1));
-                }
-            }
-            return remainingString;
+            // const remainingString: string[] = [];
+            // for (const s of noAnswerList) {
+            //     if (input === s.substr(0, 1)) {
+            //         remainingString.push(s.substr(1));
+            //     }
+            // }
+
+            return noAnswerList
+                .filter((word) => (word.substr(0, 1) === input))
+                .map((word) => word.substr(1));
         }
 
         @Emit()

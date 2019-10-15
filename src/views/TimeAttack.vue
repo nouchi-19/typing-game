@@ -60,6 +60,7 @@
                         <v-col md="4" class="text-center">総タイピング数:{{ slotProps.allTypingCount }}</v-col>
                         <v-col md="4" class="text-center">総正解タイピング数: {{ slotProps.clearTypingCount }}</v-col>
                         <v-col md="4" class="text-center">連続正解タイピング数:{{ slotProps.continuousTypingCount }}</v-col>
+                        <v-col md="4" class="text-center">最長正解タイピング数:{{ slotProps.maxContinuousTypingCount }}</v-col>
                         <v-col md="4" class="text-center">ミスタイプ数:{{ slotProps.missTypeCount }}</v-col>
                         <v-col md="4" class="text-center">秒間正解数:{{ slotProps.parSeconds }}</v-col>
                     </v-row>
@@ -89,7 +90,7 @@
                     <v-container fluid>
                         <v-row>総タイピング数:{{ result.allTypingCount }}</v-row>
                         <v-row>総正解タイピング数: {{result.clearTypingCount}}</v-row>
-                        <v-row>連続正解タイピング数:{{result.continuousTypingCount}}</v-row>
+                        <v-row>最長正解タイピング数:{{result.maxContinuousTypingCount}}</v-row>
                         <v-row>ミスタイプ数:{{result.missTypeCount}}</v-row>
                         <v-row>秒間正解数:{{result.parSeconds}}</v-row>
                         <v-row>
@@ -104,14 +105,14 @@
                             ></v-text-field>
                         </v-row>
                         <!--実装後変更-->
-                        <!--<v-row justify="center">-->
-                            <!--<v-btn :disabled="!userName" class="ma-2" outlined color="teal" @click="sendRanking">ランキングに登録する</v-btn>-->
-                        <!--</v-row>-->
+                        <v-row justify="center">
+                            <v-btn :disabled="!userName" class="ma-2" outlined color="teal" @click="sendRanking">ランキングに登録する</v-btn>
+                        </v-row>
                         <!--ここまで-->
                         <!--下記実装後削除-->
-                        <v-row justify="center">
-                            <v-btn disabled=false class="ma-2" outlined color="teal" @click="sendRanking">ランキングに登録する</v-btn>
-                        </v-row>
+                        <!--<v-row justify="center">-->
+                            <!--<v-btn disabled=false class="ma-2" outlined color="teal" @click="sendRanking">ランキングに登録する</v-btn>-->
+                        <!--</v-row>-->
                         <!--ここまで-->
                     </v-container>
                 </v-card-text>
@@ -119,7 +120,6 @@
                     <v-row justify="center">
                         <!--<v-btn class="ma-2" outlined color="teal" @click="transition('/time-attack-ranking')">ランキングを見る</v-btn>-->
                         <v-btn
-                                disabled=false
                                 rounded
                                 class="ma-2"
                                 outlined color="teal"
@@ -143,7 +143,7 @@
 
         <v-dialog v-model="dialog2" persistent max-width="500">
             <v-card>
-                <!--<v-card-title class="headline text-center">{{this.userName}}さんの記録を登録しました</v-card-title>-->
+                <v-card-title class="headline text-center">{{this.userName}}さんの記録を登録しました</v-card-title>
                 <v-card-actions>
                     <v-row justify="center">
                         <v-btn class="ma-2" outlined color="teal" @click="transition('/time-attack-ranking')">ランキングを見る</v-btn>
@@ -180,9 +180,12 @@
 <script lang='ts'>
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import SinglePlayBase from '@/views/SinglePlayBase.vue';
-    import {Result} from '../components/Result';
+    import {Result} from '../entities/Result';
     import TimeAttackRanking from '@/views/TimeAttackRanking.vue';
     import Modal from '@/components/Modal.vue';
+    import {TimeAttackLimit} from '../entities/TimeAttackLimit';
+    import axios from 'axios';
+    import {TimeAttackResultReq} from '../entities/TimeAttackResultReq';
 
     @Component({
         components: {
@@ -208,6 +211,7 @@
             allTypingCount: 0,
             clearTypingCount: 0,
             continuousTypingCount: 0,
+            maxContinuousTypingCount: 0,
             missTypeCount: 0,
             parSeconds: 0,
         };
@@ -224,11 +228,41 @@
             this.$router.push(path);
         }
 
-        private sendRanking() {
+        private async sendRanking() {
+
+            const send: TimeAttackResultReq = {
+                mode: TimeAttackLimit[60],
+                userName: this.userName,
+                allTyping: this.result.allTypingCount,
+                clearTyping: this.result.clearTypingCount,
+                maxContinuousTyping: this.result.maxContinuousTypingCount,
+                perSecond: this.result.parSeconds,
+                missType: this.result.missTypeCount,
+            };
+            await axios.post('https://typing-game-ranking.now.sh/api/v1/results', send)
+                .then(
+                    (response) => {
+                        return;
+                    },
+                ).catch(
+                    () => {
+                        // Vue.swal({
+                        //     type: 'error',
+                        //     title: 'エラー',
+                        //     text: '問題データを読み込めませんでした',
+                        //     allowOutsideClick:false,
+                        //     confirmButtonText:'ホームに戻る',
+                        // }).then(() => {
+                        //     this.$router.push('/');
+                        // });
+                    },
+                );
+
             // console.log(this.userName);
             this.dialog2 = true;
             // ランキング送信後下のURLにリンク
             // this.$router.push('/time-attack-ranking');
+
         }
     }
 </script>

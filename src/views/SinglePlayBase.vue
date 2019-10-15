@@ -6,6 +6,7 @@
                     :allTypingCount="allTypingCount"
                     :clearTypingCount="clearTypingCount"
                     :continuousTypingCount="continuousTypingCount"
+                    :maxContinuousTypingCount="maxContinuousTypingCount"
                     :missTypeCount="missTypeCount"
                     :parSeconds="parSeconds"
                     :seconds="seconds"
@@ -31,6 +32,7 @@
                     :allTypingCount="allTypingCount"
                     :clearTypingCount="clearTypingCount"
                     :continuousTypingCount="continuousTypingCount"
+                    :maxContinuousTypingCount="maxContinuousTypingCount"
                     :missTypeCount="missTypeCount"
                     :parSeconds="parSeconds"
                     :seconds="seconds"
@@ -54,9 +56,12 @@
     import {Component, Emit, Prop, Vue, Watch} from 'vue-property-decorator';
     import TypingGameCore from '../components/TypingGameCore.vue';
     import axios from 'axios';
-    import {Counter} from '@/components/Counter.ts';
+    import {Counter} from '@/entities/Counter.ts';
     import StartMessage from '@/components/StartMessage.vue';
-    import {Result} from '@/components/Result';
+    import {Result} from '@/entities/Result';
+    import VueSweetalert2 from 'vue-sweetalert2';
+
+    Vue.use(VueSweetalert2);
 
     @Component({
         components: {
@@ -82,6 +87,7 @@
         //
         private allTypingCount: number = 0;
         private continuousTypingCount: number = 0;
+        private maxContinuousTypingCount: number = 0;
         private missTypeCount: number = 0;
         private seconds: number = 0;
 
@@ -95,7 +101,19 @@
                     (response) => {
                         this.questions = response.data.questions;
                     },
-                ).catch();
+                ).catch(
+                    () => {
+                        Vue.swal({
+                            type: 'error',
+                            title: 'エラー',
+                            text: '問題データを読み込めませんでした',
+                            allowOutsideClick: false,
+                            confirmButtonText: 'ホームに戻る',
+                        }).then(() => {
+                            this.$router.push('/');
+                        });
+                    },
+                );
             this.questionNumber = Math.floor( Math.random() * this.questions.length);
         }
 
@@ -110,7 +128,7 @@
 
         private keyDown(e: any) {
             if (!this.gameRanning && e.code === 'Space')  {
-                this.countReset();
+                this.counterReset();
                 this.gameRanning = true;
                 this.intervalId = setInterval(() => {
                     this.seconds++;
@@ -135,7 +153,7 @@
 
         // todo
         // リセットが多すぎる
-        private countReset() {
+        private counterReset() {
             this.timeReset();
             this.allTypingCount = 0;
             this.continuousTypingCount = 0;
@@ -147,7 +165,7 @@
         // 無駄な処理がある
         private restart() {
             this.gameRanning = false;
-            this.countReset();
+            this.counterReset();
             clearInterval(this.intervalId);
             window.addEventListener('keydown', this.keyDown);
         }
@@ -156,6 +174,9 @@
             this.allTypingCount = result.allTypingCount;
             this.continuousTypingCount = result.continuousTypingCount;
             this.missTypeCount = result.missTypeCount;
+            if (this.maxContinuousTypingCount < result.continuousTypingCount) {
+                this.maxContinuousTypingCount = result.continuousTypingCount;
+            }
         }
 
         private setNextQuestion() {
@@ -183,7 +204,27 @@
             if (this.seconds === 0) {
                 return 0;
             }
-            return Math.floor(this.clearTypingCount / this.seconds * 100 ) / 100;
+            const parsec = Math.floor(this.clearTypingCount / this.seconds * 100 ) / 100;
+            if (parsec > 15) {
+                Vue.swal({
+                    type: 'error',
+                    title: '自動タイピングを検知しました',
+                    text: 'やり直してください',
+                    allowOutsideClick: false,
+                    confirmButtonText: 'ホームに戻る',
+                    onOpen: () => {
+                        clearInterval(this.intervalId);
+                        return;
+                    },
+                }).then(() => {
+                    // this.intervalId = setInterval(() => {
+                    //     this.seconds++;
+                    // }, 1000);
+                    this.$router.push('/');
+                });
+            }
+
+            return parsec;
         }
 
         private get remainingTime() {
@@ -203,6 +244,7 @@
                 allTypingCount: this.allTypingCount,
                 clearTypingCount: this.clearTypingCount,
                 continuousTypingCount: this.continuousTypingCount,
+                maxContinuousTypingCount: this.maxContinuousTypingCount,
                 missTypeCount: this.missTypeCount,
                 parSeconds: this.parSeconds,
             };
