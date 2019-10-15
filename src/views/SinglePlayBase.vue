@@ -96,30 +96,45 @@
         private gameRanning: boolean = false;
 
         private async created() {
-            await axios.get(this.dataURL)
-                .then(
-                    (response) => {
-                        this.questions = response.data.questions;
-                    },
-                ).catch(
-                    () => {
-                        Vue.swal({
-                            type: 'error',
-                            title: 'エラー',
-                            text: '問題データを読み込めませんでした',
-                            allowOutsideClick: false,
-                            confirmButtonText: 'ホームに戻る',
-                        }).then(() => {
-                            this.$router.push('/');
-                        });
-                    },
-                );
-            this.questionNumber = Math.floor( Math.random() * this.questions.length);
+            // await axios.get(this.dataURL)
+            //     .then(
+            //         (response) => {
+            //             this.questions = response.data.questions;
+            //             window.addEventListener('keydown', this.keyDown);
+            //             this.questionNumber = Math.floor( Math.random() * this.questions.length);
+            //         },
+            //     ).catch(
+            //         (e) => {
+            //             Vue.swal({
+            //                 type: 'error',
+            //                 title: 'エラー',
+            //                 text: '問題データを読み込めませんでした',
+            //                 allowOutsideClick: false,
+            //                 confirmButtonText: 'ホームに戻る',
+            //             }).then(() => {
+            //                 this.$router.push('/');
+            //             });
+            //         },
+            //     );
+            try {
+                const res = await axios.get(this.dataURL);
+                this.questions = res.data.questions;
+                window.addEventListener('keydown', this.keyDown);
+                this.questionNumber = Math.floor( Math.random() * this.questions.length);
+
+            } catch {
+                Vue.swal({
+                    type: 'error',
+                    title: 'エラー',
+                    text: '問題データを読み込めませんでした',
+                    allowOutsideClick: false,
+                    confirmButtonText: 'ホームに戻る',
+                }).then(() => {
+                    this.$router.push('/');
+                });
+            }
         }
 
-        private mounted() {
-            window.addEventListener('keydown', this.keyDown);
-        }
 
         // 複数展開どうなんのこれ
         private destroyed() {
