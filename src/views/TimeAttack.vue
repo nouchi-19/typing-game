@@ -231,7 +231,7 @@
         private async sendRanking() {
 
             const send: TimeAttackResultReq = {
-                mode: TimeAttackLimit[60],
+                mode: TimeAttackLimit[this.limit],
                 userName: this.userName,
                 allTyping: this.result.allTypingCount,
                 clearTyping: this.result.clearTypingCount,

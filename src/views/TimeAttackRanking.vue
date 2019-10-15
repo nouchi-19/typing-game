@@ -9,18 +9,16 @@ import {TimeAttackLimit} from "../entities/TimeAttackLimit";
                 タイムアタックランキング
             </span>
         </v-row>
-        <!--todo-->
-        <!--以下とりあえずの実装。多数のモードに対応させること-->
         <v-tabs
                 v-model="tabs"
                 grow
         >
-            <v-tab @click="onChenge(60)">60秒タイムアタック</v-tab>
-            <v-tab @click="onChenge(120)">120秒タイムアタック</v-tab>
+            <v-tab  v-for="m of modeList" @click="onChenge(m)">{{m}}秒タイムアタック</v-tab>
+            <!--<v-tab @click="onChenge(120)">120秒タイムアタック</v-tab>-->
         </v-tabs>
         <v-tabs-slider></v-tabs-slider>
         <v-tabs-items v-model="tabs">
-            <v-tab-item>
+            <v-tab-item v-for="m of modeList">
                 <v-card
                         flat
                         tile
@@ -55,41 +53,41 @@ import {TimeAttackLimit} from "../entities/TimeAttackLimit";
                     </v-card-text>
                 </v-card>
             </v-tab-item>
-            <v-tab-item>
-                <v-card
-                        flat
-                        tile
-                >
-                    <v-card-text>
-                        <v-simple-table fixed-header>
-                            <template>
-                                <thead>
-                                <tr>
-                                    <th class="text-left">順位</th>
-                                    <th class="text-left">名前</th>
-                                    <th class="text-left">秒間タイピング数</th>
-                                    <th class="text-left">正答タイプ数</th>
-                                    <th class="text-left">連続最高正答タイプ数</th>
-                                    <th class="text-left">ミスタイプ数</th>
-                                    <th class="text-left">日付</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr v-for="(result, i) of showResult">
-                                    <td>{{ i + 1 }}</td>
-                                    <td>{{ result.userName }}</td>
-                                    <td>{{ result.perSecond }}</td>
-                                    <td>{{ result.clearTyping }}</td>
-                                    <td>{{ result.maxContinuousTyping }}</td>
-                                    <td>{{ result.missType }}</td>
-                                    <td>{{ result.date }}</td>
-                                </tr>
-                                </tbody>
-                            </template>
-                        </v-simple-table>
-                    </v-card-text>
-                </v-card>
-            </v-tab-item>
+            <!--<v-tab-item>-->
+                <!--<v-card-->
+                        <!--flat-->
+                        <!--tile-->
+                <!--&gt;-->
+                    <!--<v-card-text>-->
+                        <!--<v-simple-table fixed-header>-->
+                            <!--<template>-->
+                                <!--<thead>-->
+                                <!--<tr>-->
+                                    <!--<th class="text-left">順位</th>-->
+                                    <!--<th class="text-left">名前</th>-->
+                                    <!--<th class="text-left">秒間タイピング数</th>-->
+                                    <!--<th class="text-left">正答タイプ数</th>-->
+                                    <!--<th class="text-left">連続最高正答タイプ数</th>-->
+                                    <!--<th class="text-left">ミスタイプ数</th>-->
+                                    <!--<th class="text-left">日付</th>-->
+                                <!--</tr>-->
+                                <!--</thead>-->
+                                <!--<tbody>-->
+                                <!--<tr v-for="(result, i) of showResult">-->
+                                    <!--<td>{{ i + 1 }}</td>-->
+                                    <!--<td>{{ result.userName }}</td>-->
+                                    <!--<td>{{ result.perSecond }}</td>-->
+                                    <!--<td>{{ result.clearTyping }}</td>-->
+                                    <!--<td>{{ result.maxContinuousTyping }}</td>-->
+                                    <!--<td>{{ result.missType }}</td>-->
+                                    <!--<td>{{ result.date }}</td>-->
+                                <!--</tr>-->
+                                <!--</tbody>-->
+                            <!--</template>-->
+                        <!--</v-simple-table>-->
+                    <!--</v-card-text>-->
+                <!--</v-card>-->
+            <!--</v-tab-item>-->
         </v-tabs-items>
 
         <!--<v-row justify="center">-->
@@ -184,6 +182,13 @@ import {TimeAttackLimit} from "../entities/TimeAttackLimit";
         private results: TimeAttackResultRes[] = [];
 
         private mode: TimeAttackLimit = TimeAttackLimit.Limit_60;
+
+        private modeList: TimeAttackLimit[]  = [
+            TimeAttackLimit.Limit_60,
+            TimeAttackLimit.Limit_90,
+            TimeAttackLimit.Limit_120,
+            TimeAttackLimit.Limit_150,
+        ];
 
         private tabs: any = null;
 

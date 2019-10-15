@@ -31,20 +31,62 @@ export default new Router({
             component: () => import('./views/Practice.vue'),
         },
         {
-            path: '/time-attack60',
-            name: 'time-attack60',
+            path: '/practice_all',
+            name: 'practice_all',
+            props: {dataURL: '/mock/all.json'},
+            component: () => import('./views/Practice.vue'),
+        },
+        {
+            path: '/practice_word2-6',
+            name: 'practice_word2-6',
+            props: {dataURL: '/mock/word2-6.json'},
+            component: () => import('./views/Practice.vue'),
+        },
+        {
+            path: '/practice_word7-9',
+            name: 'practice_word7-9',
+            props: {dataURL: '/mock/word7-9.json'},
+            component: () => import('./views/Practice.vue'),
+        },
+        {
+            path: '/practice_word10-14over',
+            name: 'practice_word10-14over',
+            props: {dataURL: '/mock/word10-14over.json'},
+            component: () => import('./views/Practice.vue'),
+        },
+        {
+            path: '/time-attack_60',
+            name: 'time-attack_60',
             props: {
-                dataURL: '/mock/mock2.json',
+                dataURL: '/mock/word2-6.json',
                 limit: 60,
             },
             component: () => import('./views/TimeAttack.vue'),
         },
         {
-            path: '/time-attack120',
-            name: 'time-attack120',
+            path: '/time-attack_90',
+            name: 'time-attack_90',
             props: {
-                dataURL: '/mock/mock2.json',
+                dataURL: '/mock/word7-9.json',
+                limit: 90,
+            },
+            component: () => import('./views/TimeAttack.vue'),
+        },
+        {
+            path: '/time-attack_120',
+            name: 'time-attack_120',
+            props: {
+                dataURL: '/mock/word10-14over.json',
                 limit: 120,
+            },
+            component: () => import('./views/TimeAttack.vue'),
+        },
+        {
+            path: '/time-attack_150',
+            name: 'time-attack_150',
+            props: {
+                dataURL: '/mock/all.json',
+                limit: 150,
             },
             component: () => import('./views/TimeAttack.vue'),
         },
