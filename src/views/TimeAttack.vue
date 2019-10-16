@@ -106,7 +106,7 @@
                         </v-row>
                         <!--実装後変更-->
                         <v-row justify="center">
-                            <v-btn :disabled="!userName" class="ma-2" outlined color="teal" @click="sendRanking">ランキングに登録する</v-btn>
+                            <v-btn :disabled="!canPost" class="ma-2" outlined color="teal" @click="sendRanking">ランキングに登録する</v-btn>
                         </v-row>
                         <!--ここまで-->
                         <!--下記実装後削除-->
@@ -178,7 +178,7 @@
 </template>
 
 <script lang='ts'>
-    import {Component, Prop, Vue} from 'vue-property-decorator';
+    import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
     import SinglePlayBase from '@/views/SinglePlayBase.vue';
     import {Result} from '../entities/Result';
     import TimeAttackRanking from '@/views/TimeAttackRanking.vue';
@@ -205,6 +205,8 @@
 
         private showModal: boolean = false;
 
+        private canPost: boolean = false;
+
         private dialog2: boolean = false;
 
         private result: Result = {
@@ -228,8 +230,16 @@
             this.$router.push(path);
         }
 
-        private async sendRanking() {
+        @Watch ('userName')
+        private canPostWatcher() {
+            if (this.userName !==  '') {
+                this.canPost = true;
+            } else {
+                this.canPost = false;
+            }
+        }
 
+        private async sendRanking() {
             const send: TimeAttackResultReq = {
                 mode: TimeAttackLimit[this.limit],
                 userName: this.userName,
@@ -239,27 +249,28 @@
                 perSecond: this.result.parSeconds,
                 missType: this.result.missTypeCount,
             };
+            this.canPost = false;
             await axios.post('https://typing-game-ranking.now.sh/api/v1/results', send)
                 .then(
                     (response) => {
-                        return;
+                        this.dialog2 = true;
                     },
                 ).catch(
-                    () => {
-                        // Vue.swal({
-                        //     type: 'error',
-                        //     title: 'エラー',
-                        //     text: '問題データを読み込めませんでした',
-                        //     allowOutsideClick:false,
-                        //     confirmButtonText:'ホームに戻る',
-                        // }).then(() => {
-                        //     this.$router.push('/');
-                        // });
-                    },
+                    // () => {
+                    //     Vue.swal({
+                    //         type: 'error',
+                    //         title: 'エラー',
+                    //         text: '問題データを読み込めませんでした',
+                    //         allowOutsideClick:false,
+                    //         confirmButtonText:'ホームに戻る',
+                    //     }).then(() => {
+                    //         this.$router.push('/');
+                    //     });
+                    // },
                 );
 
             // console.log(this.userName);
-            this.dialog2 = true;
+            // this.dialog2 = true;
             // ランキング送信後下のURLにリンク
             // this.$router.push('/time-attack-ranking');
 
