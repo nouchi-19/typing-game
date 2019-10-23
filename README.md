@@ -1,5 +1,11 @@
 # typing-game
 
+#### todo
+* タイプ音つける
+* タイプ数などのカウンターの表示UIを見やすくする
+* 対戦の実装
+
+
 ## Project setup
 ```
 npm install

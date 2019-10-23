@@ -99,6 +99,8 @@
                                     required
                                     outlined
                                     clearable
+                                    counter
+                                    maxlength="25"
                                     v-model="userName"
                                     hint="ランキングに登録する場合はユーザ名を必ず入力してください"
                                     persistent-hint

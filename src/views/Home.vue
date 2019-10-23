@@ -131,7 +131,7 @@
                     },
                     {
                         path: '/practice_word10-14over',
-                        name: '中級',
+                        name: '上級',
                         comment: '10〜14文字以上の単語が出ます。',
                     },
                 ],
