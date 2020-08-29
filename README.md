@@ -1,4 +1,5 @@
 # typing-game
+https://vue-typing-game.netlify.app/
 
 #### todo
 * タイプ音つける
